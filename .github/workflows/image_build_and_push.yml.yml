@@ -1,0 +1,41 @@
+name: Build and Push bingo and reverseproxy container images to Yandex Container Registry
+
+on: 
+  push: 
+    branches: [ main ]
+  pull_request: 
+    branches: [ main ]
+  workflow_dispatch: 
+
+jobs: 
+
+  build: 
+  
+    runs-on: ubuntu-latest
+
+    steps: 
+    - uses: actions/checkout@v3
+    
+    - name: Login to Yandex Cloud Container Registry
+      id: login-cr
+      uses: yc-actions/yc-cr-login@v1
+      with:
+        yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
+
+    - name: Build, tag, and push bingoapp image
+      env:
+        CR_REGISTRY: crp05khnonqj956e2djl
+        CR_REPOSITORY: bingoapp
+        IMAGE_TAG: v1
+      run: |
+        docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG ./bingoapp
+        docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG
+
+    - name: Build, tag, and push reverseproxy image
+      env:
+        CR_REGISTRY: crp05khnonqj956e2djl
+        CR_REPOSITORY: reverseproxy
+        IMAGE_TAG: v1
+      run: |
+        docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG ./reverseproxy
+        docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG
