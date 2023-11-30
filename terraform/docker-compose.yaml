@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  bingo:
+    container_name: bingoapp
+    image: cr.yandex/crp05khnonqj956e2djl/bingoapp:v1
+    network_mode: "host"
+    restart: always
+    volumes:
+      - /opt/bingo:/opt/bingo
+      - /opt/bongo/logs/8e622be107:/opt/bongo/logs/8e622be107
+  reverseproxy:
+    container_name: reverseproxy
+    image: cr.yandex/crp05khnonqj956e2djl/reverseproxy:v1
+    network_mode: "host"
+    restart: always

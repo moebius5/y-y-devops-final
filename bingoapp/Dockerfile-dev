@@ -1,0 +1,13 @@
+#FROM gcr.io/distroless/static-debian12:latest-amd64 AS build-release-stage
+#FROM gcr.io/distroless/static-debian12:debug
+FROM gcr.io/distroless/base-debian12:debug
+
+WORKDIR /
+
+COPY ./bingo . 
+
+EXPOSE 7849
+
+USER nonroot:nonroot
+
+CMD [ "/bingo", "run_server" ]

@@ -1,0 +1,4 @@
+#cloud-config
+runcmd:
+    - [ mkdir, -p, /opt/bongo/logs/8e622be107 ]
+    - [ chown, -R, "65532:65532", /opt/bongo/logs/8e622be107 ]

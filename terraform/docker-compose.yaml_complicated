@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  bingo:
+    image: bingo
+    network_mode: "host"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 1s
+      mode: replicated
+      replicas: 2
+    volumes:
+      - /opt/bingo:/opt/bingo
+      - /opt/bongo/logs/8e622be107:/opt/bongo/logs/8e622be107
