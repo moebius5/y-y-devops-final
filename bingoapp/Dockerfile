@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/static-debian12:latest-amd64
+FROM debian:bullseye-slim
 
 WORKDIR /
 
@@ -6,6 +6,6 @@ COPY ./bingo .
 
 EXPOSE 7849
 
-USER nonroot:nonroot
+USER nobody:nogroup
 
 CMD [ "/bingo", "run_server" ]
