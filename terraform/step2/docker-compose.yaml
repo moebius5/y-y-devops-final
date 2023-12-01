@@ -6,7 +6,7 @@ services:
     network_mode: "host"
     restart: always
     healthcheck:
-      test: curl -f --retry 2 --max-time 1 --retry-delay 0 --retry-max-time 2 "http://localhost:7849/ping" || kill 1
+      test: curl -f --retry 2 --max-time 1 --retry-delay 0 --retry-max-time 2 "http://localhost:7849/ping" || bash -c 'kill -s 15 -1 && (sleep 1; kill -s 9 -1)'
       start_period: 4s
       interval: 2s
       timeout: 5s
