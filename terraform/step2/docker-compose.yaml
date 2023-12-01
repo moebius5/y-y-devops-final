@@ -3,6 +3,7 @@ services:
   bingo:
     container_name: bingoapp
     image: cr.yandex/crp05khnonqj956e2djl/bingoapp:v1
+    network_mode: bridge
     ports:
       - "7849:7849"
     restart: always
@@ -18,6 +19,7 @@ services:
   bingo-backup:
     container_name: bingoapp-backup
     image: cr.yandex/crp05khnonqj956e2djl/bingoapp:v1
+    network_mode: bridge
     ports:
       - "7850:7849"
     restart: always
