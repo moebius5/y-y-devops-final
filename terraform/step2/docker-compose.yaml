@@ -3,7 +3,8 @@ services:
   bingo:
     container_name: bingoapp
     image: cr.yandex/crp05khnonqj956e2djl/bingoapp:v1
-    network_mode: "host"
+    ports:
+      - "7849:7849"
     restart: always
     healthcheck:
       test: curl -f --retry 2 --max-time 1 --retry-delay 0 --retry-max-time 2 "http://localhost:7849/ping" || kill 1
@@ -14,6 +15,21 @@ services:
     volumes:
       - /opt/bingo:/opt/bingo
       - /opt/bongo/logs/8e622be107:/opt/bongo/logs/8e622be107
+  bingo-backup:
+    container_name: bingoapp-backup
+    image: cr.yandex/crp05khnonqj956e2djl/bingoapp:v1
+    ports:
+      - "7850:7849"
+    restart: always
+    healthcheck:
+      test: curl -f --retry 2 --max-time 1 --retry-delay 0 --retry-max-time 2 "http://localhost:7849/ping" || kill 1
+      start_period: 4s
+      interval: 2s
+      timeout: 5s
+      retries: 2
+    volumes:
+      - /opt/bingo:/opt/bingo
+      - /opt/bongo_bak/logs/8e622be107:/opt/bongo/logs/8e622be107
   reverseproxy:
     container_name: reverseproxy
     image: cr.yandex/crp05khnonqj956e2djl/reverseproxy:v1
