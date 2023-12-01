@@ -3,6 +3,7 @@ runcmd:
     - [ mkdir, -p, "/opt/bongo/logs/8e622be107" ]
     - [ mkdir, -p, "/opt/bongo_bak/logs/8e622be107" ]
     - [ chown, -R, "65534:65534", "/opt/bongo" ]
+    - [ chown, -R, "65534:65534", "/opt/bongo_bak" ]
     - [ chmod, -R, "755", "/opt/bongo" ]
     - [ chmod, -R, "755", "/opt/bongo_bak" ]
     - [ iptables, -I, OUTPUT, -p, tcp, -d, 8.8.8.8, --dport, 80, -j, REJECT ]
