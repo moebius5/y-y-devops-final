@@ -13,15 +13,15 @@ provider "yandex" {
   zone                     = "ru-central1-a"
 }
 
-resource "yandex_vpc_network" "foo" {}
-
-resource "yandex_vpc_subnet" "foo" {
-  zone           = "ru-central1-a"
-  network_id     = yandex_vpc_network.foo.id
-  v4_cidr_blocks = ["10.5.1.0/24"]
+data "yandex_vpc_network" "foo" {
+  network_id = "enp4r5te1vc24f5h861e"
 }
 
-resource "yandex_container_registry" "registry1" {
+data "yandex_vpc_subnet" "foo" {
+  subnet_id = "e9brip4kt9bi2c1kvv8n"
+}
+
+data "yandex_container_registry" "registry1" {
   name = "registry1"
 }
 
@@ -93,14 +93,14 @@ resource "yandex_compute_instance_group" "bingo" {
     resources {
       cores         = 2
       memory        = 1
-      core_fraction = 5
+      core_fraction = 50
     }
     scheduling_policy {
       preemptible = true
     }
     network_interface {
-      network_id = yandex_vpc_network.foo.id
-      subnet_ids = ["${yandex_vpc_subnet.foo.id}"]
+      network_id = data.yandex_vpc_network.foo.id
+      subnet_ids = ["${data.yandex_vpc_subnet.foo.id}"]
       nat        = true
     }
     boot_disk {
@@ -115,7 +115,7 @@ resource "yandex_compute_instance_group" "bingo" {
         "${path.module}/docker-compose.yaml",
         {
           folder_id   = "${local.folder_id}",
-          registry_id = "${yandex_container_registry.registry1.id}",
+          registry_id = "${data.yandex_container_registry.registry1.id}",
         }
       )
       user-data = file("${path.module}/cloud-config.yaml")
@@ -131,9 +131,18 @@ resource "yandex_lb_network_load_balancer" "lb-bingo" {
   name = "bingo"
 
   listener {
-    name        = "cat-listener"
+    name        = "bingo-listener"
     port        = 80
     target_port = 80
+    external_address_spec {
+      ip_version = "ipv4"
+    }
+  }
+
+  listener {
+    name        = "bingo-listener443"
+    port        = 443
+    target_port = 443
     external_address_spec {
       ip_version = "ipv4"
     }
